@@ -5,6 +5,12 @@ import * as React from 'react'
 import {getByLabelText, render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Login from '../../components/login'
+import faker from 'faker'
+
+const buildLoginForm = () => ({
+  username: faker.internet.userName(),
+  password: faker.internet.password(),
+})
 
 test('submitting the form calls onSubmit with username and password', async () => {
   // 🐨 create a variable called "submittedData" and a handleSubmit function that
@@ -28,8 +34,7 @@ test('submitting the form calls onSubmit with username and password', async () =
     submittedData = data
     mockFn(data)
   }
-  const username = 'Imanol'
-  const password = '1234'
+  const {username, password} = buildLoginForm()
   const {getByLabelText, getByText} = render(<Login onSubmit={handleSubmit} />)
   await userEvent.type(getByLabelText('Username'), username)
   await userEvent.type(getByLabelText('Password'), password)
