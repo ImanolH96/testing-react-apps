@@ -23,7 +23,11 @@ test('submitting the form calls onSubmit with username and password', async () =
   // assert that submittedData is correct
   // 💰 use `toEqual` from Jest: 📜 https://jestjs.io/docs/en/expect#toequalvalue
   let submittedData
-  const handleSubmit = data => (submittedData = data)
+  const mockFn = jest.fn()
+  const handleSubmit = data => {
+    submittedData = data
+    mockFn(data)
+  }
   const username = 'Imanol'
   const password = '1234'
   const {getByLabelText, getByText} = render(<Login onSubmit={handleSubmit} />)
@@ -31,6 +35,7 @@ test('submitting the form calls onSubmit with username and password', async () =
   await userEvent.type(getByLabelText('Password'), password)
   await userEvent.click(getByText('Submit'))
   expect(submittedData).toEqual({username, password})
+  expect(mockFn).toHaveBeenCalledWith({username, password})
 })
 
 /*
